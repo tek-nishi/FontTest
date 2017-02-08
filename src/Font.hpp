@@ -155,9 +155,19 @@ public:
     return context_;
   }
 
-  static unsigned int colorA(const unsigned char r, const unsigned char g, const unsigned char b, const unsigned char a) noexcept
+  static unsigned int color8(const unsigned char r, const unsigned char g, const unsigned char b, const unsigned char a) noexcept
   {
     return (r) | (g << 8) | (b << 16) | (a << 24);
+  }
+
+  static unsigned int color(const float r, const float g, const float b, const float a = 1.0f) noexcept
+  {
+    unsigned char r8 = r * 255.0f;
+    unsigned char g8 = g * 255.0f;
+    unsigned char b8 = b * 255.0f;
+    unsigned char a8 = a * 255.0f;
+    
+    return (r8) | (g8 << 8) | (b8 << 16) | (a8 << 24);
   }
 
 };

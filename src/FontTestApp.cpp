@@ -58,15 +58,15 @@ public:
 
     fonsSetSize(font_(), 64.0f);
     fonsSetFont(font_(), fontNormal);
-    fonsSetColor(font_(), font_.colorA(64, 255, 255, 255));
+    fonsSetColor(font_(), font_.color(0.25, 1, 1, 1));
     fonsDrawText(font_(), 100, 100, "Hoge Fuga Piyo", NULL);
 
     fonsSetFont(font_(), fontJpn);
-    fonsSetColor(font_(), font_.colorA(255, 255, 64, 255));
+    fonsSetColor(font_(), font_.color(1, 1, 0.25, 1));
     fonsDrawText(font_(), 100, 200, "ほげ　ふが　ぴよ", NULL);
 
     fonsSetSize(font_(), 16.0f);
-    fonsSetColor(font_(), font_.colorA(255, 64, 255, 255));
+    fonsSetColor(font_(), font_.color(1, 0.25, 1, 1));
     fonsDrawText(font_(), 50, 300, "シャーロック・ホームズシリーズは、今日で言うところの「読切連載」という形式で雑誌に掲載されました。", NULL);
   }
 };
