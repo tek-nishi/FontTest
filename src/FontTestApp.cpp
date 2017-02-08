@@ -10,7 +10,7 @@
 #include "Defines.hpp"
 #include "Path.hpp"
 #include "Shader.hpp"
-#include "FontRender.hpp"
+#include "Font.hpp"
 
 
 namespace ngs {
@@ -25,8 +25,8 @@ ci::gl::GlslProgRef createShader(const std::string& vtx_shader, const std::strin
 
 class FontTestApp : public ci::app::App
 {
-  FONScontext* fs = NULL;
-
+  Font font_ = { 1024, 1024, FONS_ZERO_TOPLEFT };
+  
   int fontNormal = FONS_INVALID;
   int fontJpn    = FONS_INVALID;
 
@@ -36,43 +36,38 @@ class FontTestApp : public ci::app::App
 public:
   FontTestApp() noexcept
   {
-    fs = fontInit(512, 512, FONS_ZERO_TOPLEFT);
-
-    fontNormal = fonsAddFont(fs, "sans", getAssetPath("DroidSerif-Regular.ttf").string().c_str());
-    fontJpn    = fonsAddFont(fs, "sans-jp", getAssetPath("DroidSansJapanese.ttf").string().c_str());
+    fontNormal = fonsAddFont(font_(), "sans", getAssetPath("DroidSerif-Regular.ttf").string().c_str());
+    fontJpn    = fonsAddFont(font_(), "sans-jp", getAssetPath("DroidSansJapanese.ttf").string().c_str());
 
     font_shader_ = createShader("font", "font");
   }
 
-  ~FontTestApp() noexcept
-  {
-    fontDelete(fs);
-  }
+  ~FontTestApp() = default;
 
 
   void draw() noexcept override
   {
-    ci::gl::clear(ci::Color(0.5, 0.5, 0.5));
+    ci::gl::clear(ci::Color(0.25, 0.25, 0.25));
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     ci::gl::ScopedGlslProg glsl(font_shader_);
 
-    fonsClearState(fs);
+    fonsClearState(font_());
 
-    fonsSetSize(fs, 64.0f);
-    fonsSetFont(fs, fontNormal);
-    fonsSetColor(fs, fontRGBA(64, 255, 255, 255));
-    fonsDrawText(fs, 100, 100, "Hoge Fuga Piyo", NULL);
+    fonsSetSize(font_(), 64.0f);
+    fonsSetFont(font_(), fontNormal);
+    fonsSetColor(font_(), font_.colorA(64, 255, 255, 255));
+    fonsDrawText(font_(), 100, 100, "Hoge Fuga Piyo", NULL);
 
-    fonsSetFont(fs, fontJpn);
-    fonsSetColor(fs, fontRGBA(255, 255, 64, 255));
-    fonsDrawText(fs, 100, 200, "ほげ　ふが　ぴよ", NULL);
+    fonsSetFont(font_(), fontJpn);
+    fonsSetColor(font_(), font_.colorA(255, 255, 64, 255));
+    fonsDrawText(font_(), 100, 200, "ほげ　ふが　ぴよ", NULL);
 
-    fonsSetSize(fs, 16.0f);
-    fonsSetColor(fs, fontRGBA(255, 64, 255, 255));
-    fonsDrawText(fs, 50, 300, "シャーロック・ホームズシリーズは、今日で言うところの「読切連載」という形式で雑誌に掲載されました。", NULL);
+    fonsSetSize(font_(), 16.0f);
+    fonsSetColor(font_(), font_.colorA(255, 64, 255, 255));
+    fonsDrawText(font_(), 50, 300, "シャーロック・ホームズシリーズは、今日で言うところの「読切連載」という形式で雑誌に掲載されました。", NULL);
   }
 };
 
@@ -83,4 +78,5 @@ CINDER_APP(ngs::FontTestApp, ci::app::RendererGl,
            [](ci::app::App::Settings* settings) noexcept
            {
              settings->setTitle(PREPRO_TO_STR(PRODUCT_NAME));
+             // settings->setHighDensityDisplayEnabled(true);
            })
