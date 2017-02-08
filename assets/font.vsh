@@ -14,9 +14,7 @@ out vec4 Color;
 
 
 void main(void) {
-  vec4 position = ciModelViewProjection * ciPosition;
-
-  gl_Position = position;
+  gl_Position = ciModelViewProjection * ciPosition;
   TexCoord0   = ciTexCoord0;
   Color       = ciColor;
 }
