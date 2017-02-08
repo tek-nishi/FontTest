@@ -12,9 +12,6 @@
 #include "Shader.hpp"
 #include "FontRender.hpp"
 
-#define FONTSTASH_IMPLEMENTATION
-#include "fontstash.h"
-
 
 namespace ngs {
 
@@ -24,39 +21,6 @@ ci::gl::GlslProgRef createShader(const std::string& vtx_shader, const std::strin
   auto shader = readShader(vtx_shader, frag_shader);
   return ci::gl::GlslProg::create(shader.first, shader.second);
 }
-
-FONScontext* glfonsCreate(int width, int height, int flags)
-{
-  FONSparams params;
-  FontRender::Context* gl = new FontRender::Context;
-
-  memset(&params, 0, sizeof(params));
-  params.width = width;
-  params.height = height;
-  params.flags = (unsigned char)flags;
-
-  params.renderCreate = FontRender::create;
-  params.renderResize = FontRender::resize;
-  params.renderUpdate = FontRender::update;
-  params.renderDraw   = FontRender::draw;
-  params.renderDelete = FontRender::destroy;
-
-  params.userPtr = gl;
-
-  return fonsCreateInternal(&params);
-}
-
-void glfonsDelete(FONScontext* ctx)
-{
-  fonsDeleteInternal(ctx);
-}
-
-
-unsigned int glfonsRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
-{
-  return (r) | (g << 8) | (b << 16) | (a << 24);
-}
-
 
 
 class FontTestApp : public ci::app::App
@@ -72,7 +36,7 @@ class FontTestApp : public ci::app::App
 public:
   FontTestApp() noexcept
   {
-    fs = glfonsCreate(512, 512, FONS_ZERO_TOPLEFT);
+    fs = fontInit(512, 512, FONS_ZERO_TOPLEFT);
 
     fontNormal = fonsAddFont(fs, "sans", getAssetPath("DroidSerif-Regular.ttf").string().c_str());
     fontJpn    = fonsAddFont(fs, "sans-jp", getAssetPath("DroidSansJapanese.ttf").string().c_str());
@@ -82,7 +46,7 @@ public:
 
   ~FontTestApp() noexcept
   {
-    glfonsDelete(fs);
+    fontDelete(fs);
   }
 
 
@@ -99,15 +63,15 @@ public:
 
     fonsSetSize(fs, 64.0f);
     fonsSetFont(fs, fontNormal);
-    fonsSetColor(fs, glfonsRGBA(64, 255, 255, 255));
+    fonsSetColor(fs, fontRGBA(64, 255, 255, 255));
     fonsDrawText(fs, 100, 100, "Hoge Fuga Piyo", NULL);
 
     fonsSetFont(fs, fontJpn);
-    fonsSetColor(fs, glfonsRGBA(255, 255, 64, 255));
+    fonsSetColor(fs, fontRGBA(255, 255, 64, 255));
     fonsDrawText(fs, 100, 200, "ほげ　ふが　ぴよ", NULL);
 
     fonsSetSize(fs, 16.0f);
-    fonsSetColor(fs, glfonsRGBA(255, 64, 255, 255));
+    fonsSetColor(fs, fontRGBA(255, 64, 255, 255));
     fonsDrawText(fs, 50, 300, "シャーロック・ホームズシリーズは、今日で言うところの「読切連載」という形式で雑誌に掲載されました。", NULL);
   }
 };

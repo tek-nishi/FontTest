@@ -7,6 +7,9 @@
 #include <cinder/gl/Texture.h>
 #include <cinder/TriMesh.h>
 
+#define FONTSTASH_IMPLEMENTATION
+#include "fontstash.h"
+
 
 namespace ngs { namespace FontRender {
 
@@ -33,24 +36,24 @@ int create(void* userPtr, int width, int height)
 
 int resize(void* userPtr, int width, int height)
 {
-	// Reuse create to resize too.
-	return create(userPtr, width, height);
+  // Reuse create to resize too.
+  return create(userPtr, width, height);
 }
 
 void update(void* userPtr, int* rect, const unsigned char* data)
 {
-	Context* gl = (Context*)userPtr;
-	if (!gl->tex.get()) return;
+  Context* gl = (Context*)userPtr;
+  if (!gl->tex.get()) return;
 
-	int w = rect[2] - rect[0];
-	int h = rect[3] - rect[1];
+  int w = rect[2] - rect[0];
+  int h = rect[3] - rect[1];
 
   // TIPS:data側も切り抜いて転送するので
   //      その指定も忘れない
-	// glPixelStorei(GL_UNPACK_ALIGNMENT,1);
-	glPixelStorei(GL_UNPACK_ROW_LENGTH, gl->width);
-	glPixelStorei(GL_UNPACK_SKIP_PIXELS, rect[0]);
-	glPixelStorei(GL_UNPACK_SKIP_ROWS, rect[1]);
+  // glPixelStorei(GL_UNPACK_ALIGNMENT,1);
+  glPixelStorei(GL_UNPACK_ROW_LENGTH, gl->width);
+  glPixelStorei(GL_UNPACK_SKIP_PIXELS, rect[0]);
+  glPixelStorei(GL_UNPACK_SKIP_ROWS, rect[1]);
 
   gl->tex->update(data, GL_RED, GL_UNSIGNED_BYTE, 0, w, h, ci::ivec2(rect[0], rect[1]));
 }
@@ -59,8 +62,8 @@ void draw(void* userPtr, const float* verts, const float* tcoords, const unsigne
 {
   using namespace ci;
 
-	Context* gl = (Context*)userPtr;
-	if (!gl->tex.get()) return;
+  Context* gl = (Context*)userPtr;
+  if (!gl->tex.get()) return;
 
   auto* ctx = gl::context();
   const gl::GlslProg* curGlslProg = ctx->getGlslProg();
@@ -69,8 +72,8 @@ void draw(void* userPtr, const float* verts, const float* tcoords, const unsigne
     + sizeof(float) * nverts * 2
     + nverts * 4;
 
-	ctx->pushVao();
-	ctx->getDefaultVao()->replacementBindBegin();
+  ctx->pushVao();
+  ctx->getDefaultVao()->replacementBindBegin();
 
   gl::VboRef defaultArrayVbo = ctx->getDefaultArrayVbo( totalArrayBufferSize );
 
@@ -79,41 +82,77 @@ void draw(void* userPtr, const float* verts, const float* tcoords, const unsigne
 
   size_t curBufferOffset = 0;
   {
-		int loc = curGlslProg->getAttribSemanticLocation( geom::Attrib::POSITION );
-		gl::enableVertexAttribArray( loc );
-		gl::vertexAttribPointer( loc, 2, GL_FLOAT, GL_FALSE, 0, (void*)curBufferOffset );
-		defaultArrayVbo->bufferSubData( curBufferOffset, sizeof(float) * nverts * 2, verts );
-		curBufferOffset += sizeof(float) * nverts * 2;
+    int loc = curGlslProg->getAttribSemanticLocation( geom::Attrib::POSITION );
+    gl::enableVertexAttribArray( loc );
+    gl::vertexAttribPointer( loc, 2, GL_FLOAT, GL_FALSE, 0, (void*)curBufferOffset );
+    defaultArrayVbo->bufferSubData( curBufferOffset, sizeof(float) * nverts * 2, verts );
+    curBufferOffset += sizeof(float) * nverts * 2;
   }
 
   {
-		int loc = curGlslProg->getAttribSemanticLocation( geom::Attrib::TEX_COORD_0 );
-		gl::enableVertexAttribArray( loc );
-		gl::vertexAttribPointer( loc, 2, GL_FLOAT, GL_FALSE, 0, (void*)curBufferOffset );
-		defaultArrayVbo->bufferSubData( curBufferOffset, sizeof(float) * nverts * 2, tcoords );
-		curBufferOffset += sizeof(float)* nverts * 2;
+    int loc = curGlslProg->getAttribSemanticLocation( geom::Attrib::TEX_COORD_0 );
+    gl::enableVertexAttribArray( loc );
+    gl::vertexAttribPointer( loc, 2, GL_FLOAT, GL_FALSE, 0, (void*)curBufferOffset );
+    defaultArrayVbo->bufferSubData( curBufferOffset, sizeof(float) * nverts * 2, tcoords );
+    curBufferOffset += sizeof(float)* nverts * 2;
   }
 
   {
-		int loc = curGlslProg->getAttribSemanticLocation( geom::Attrib::COLOR );
-		gl::enableVertexAttribArray( loc );
-		gl::vertexAttribPointer( loc, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, (void*)curBufferOffset );
-		defaultArrayVbo->bufferSubData( curBufferOffset, nverts * 4, colors );
-		curBufferOffset += nverts * 4;
+    int loc = curGlslProg->getAttribSemanticLocation( geom::Attrib::COLOR );
+    gl::enableVertexAttribArray( loc );
+    gl::vertexAttribPointer( loc, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, (void*)curBufferOffset );
+    defaultArrayVbo->bufferSubData( curBufferOffset, nverts * 4, colors );
+    // curBufferOffset += nverts * 4;
   }
 
-	ctx->getDefaultVao()->replacementBindEnd();
+  ctx->getDefaultVao()->replacementBindEnd();
 
   ctx->setDefaultShaderVars();
-	ctx->drawArrays( GL_TRIANGLES, 0, nverts );
-	ctx->popVao();
+  ctx->drawArrays( GL_TRIANGLES, 0, nverts );
+  ctx->popVao();
 }
 
 
 void destroy(void* userPtr)
 {
-	Context* gl = (Context*)userPtr;
+  Context* gl = (Context*)userPtr;
   delete gl;
 }
 
-} }
+}
+
+
+// 初期化
+FONScontext* fontInit(int width, int height, int flags)
+{
+  FONSparams params;
+  FontRender::Context* gl = new FontRender::Context;
+
+  memset(&params, 0, sizeof(params));
+  params.width = width;
+  params.height = height;
+  params.flags = (unsigned char)flags;
+
+  params.renderCreate = FontRender::create;
+  params.renderResize = FontRender::resize;
+  params.renderUpdate = FontRender::update;
+  params.renderDraw   = FontRender::draw;
+  params.renderDelete = FontRender::destroy;
+
+  params.userPtr = gl;
+
+  return fonsCreateInternal(&params);
+}
+
+void fontDelete(FONScontext* ctx)
+{
+  fonsDeleteInternal(ctx);
+}
+
+
+unsigned int fontRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+{
+  return (r) | (g << 8) | (b << 16) | (a << 24);
+}
+
+}
