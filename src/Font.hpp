@@ -8,7 +8,6 @@
 #include <boost/noncopyable.hpp>
 #include <cinder/gl/Texture.h>
 #include <cinder/TriMesh.h>
-#define FONTSTASH_IMPLEMENTATION
 #include "fontstash.h"
 
 

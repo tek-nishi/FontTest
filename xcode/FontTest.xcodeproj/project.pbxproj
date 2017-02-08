@@ -16,6 +16,7 @@
 		00B784B60FF439BC000DE1D7 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
 		00B9955A1B128DF400A5C623 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B995581B128DF400A5C623 /* IOKit.framework */; };
 		00B9955B1B128DF400A5C623 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B995591B128DF400A5C623 /* IOSurface.framework */; };
+		47C2D48B1E4B6F2700742322 /* fontstash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47C2D48A1E4B6F2700742322 /* fontstash.cpp */; };
 		47FEAF7F1DDEE85B00503E9F /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 47FEAF7E1DDEE85B00503E9F /* assets */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -39,6 +40,7 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		38942F7CF50C4B0B89111D6F /* FontTest_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FontTest_Prefix.pch; sourceTree = "<group>"; };
+		47C2D48A1E4B6F2700742322 /* fontstash.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fontstash.cpp; path = ../src/fontstash.cpp; sourceTree = "<group>"; };
 		47FEAF7E1DDEE85B00503E9F /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../assets; sourceTree = "<group>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		6B36A254E17D4EDF9587341D /* FontTestApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FontTestApp.cpp; path = ../src/FontTestApp.cpp; sourceTree = "<group>"; };
@@ -71,6 +73,7 @@
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				47C2D48A1E4B6F2700742322 /* fontstash.cpp */,
 				6B36A254E17D4EDF9587341D /* FontTestApp.cpp */,
 			);
 			name = Source;
@@ -215,6 +218,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				47C2D48B1E4B6F2700742322 /* fontstash.cpp in Sources */,
 				CC03121659AE41AB82DC2E5C /* FontTestApp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
