@@ -1,6 +1,6 @@
 # Font Test Code
 
-[Cinder 0.9.0](https://libcinder.org)上でfontstashを使ったフォント描画の実装
+[Cinder 0.9.0](https://libcinder.org)上で[fontstash](https://github.com/memononen/fontstash)を使ったフォント描画の実装
 
 ## How to build
 + Cinder0.9.0が必要
