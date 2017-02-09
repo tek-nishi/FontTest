@@ -34,7 +34,7 @@ class Font
     // TIPS:テクスチャ内部形式をGL_R8にしといて
     //      シェーダーでなんとかする方式(from nanoVG)
     gl->tex = ci::gl::Texture2d::create(width, height,
-                                        ci::gl::Texture2d::Format().dataType(GL_UNSIGNED_BYTE).minFilter(GL_LINEAR).internalFormat(GL_R8));
+                                        ci::gl::Texture2d::Format().dataType(GL_UNSIGNED_BYTE).internalFormat(GL_R8));
 
     gl->width  = width;
     gl->height = height;
