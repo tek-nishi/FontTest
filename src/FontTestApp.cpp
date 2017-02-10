@@ -87,11 +87,11 @@ public:
 
       fonsSetFont(font_(), fontJpn);
       fonsSetColor(font_(), font_.color(1, 1, 0.25, 1));
-      fonsDrawText(font_(), 100, 200, "ほげ　ふが　ぴよ", nullptr);
+      fonsDrawText(font_(), 100, 200, u8"ほげ　ふが　ぴよ", nullptr);
 
       fonsSetSize(font_(), 20.0f);
       fonsSetColor(font_(), font_.color(1, 0.25, 1, 1));
-      fonsDrawText(font_(), 50, 300, "シャーロック・ホームズシリーズは、今日で言うところの「読切連載」という形式で雑誌に掲載されました。", NULL);
+      fonsDrawText(font_(), 50, 300, u8"シャーロック・ホームズシリーズは、今日で言うところの「読切連載」という形式で雑誌に掲載されました。", NULL);
     }
 
     {
