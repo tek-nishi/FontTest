@@ -51,8 +51,8 @@ public:
   FontTestApp() noexcept
   : font_shader_(createShader("font", "font"))
   {
-    fontNormal = fonsAddFont(font_(), "sans", getAssetPath("DroidSerif-Regular.ttf").c_str());
-    fontJpn    = fonsAddFont(font_(), "sans-jp", getAssetPath("DroidSansJapanese.ttf").c_str());
+    fontNormal = fonsAddFont(font_(), "sans", getAssetPath("DroidSerif-Regular.ttf").string().c_str());
+    fontJpn    = fonsAddFont(font_(), "sans-jp", getAssetPath("DroidSansJapanese.ttf").string().c_str());
 
     setupCamera(ci::app::toPixels(ci::app::getWindowSize()));
   }

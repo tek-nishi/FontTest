@@ -47,3 +47,9 @@ using u_int   = unsigned int;
 using u_long  = unsigned long;
 
 }
+
+
+#if defined(_MSC_VER)
+// FIXME:(T^T)
+#include <windows.h>
+#endif
